@@ -8,6 +8,7 @@ const url = "https://tod-api.trakindo.co.id/api/service/quotation";
 const api = { endpoint: url, method: "GET", data: {} };
 const interval = 300000; //ms 5m
 const timeout = 30;
+s;
 const token = "";
 
 // init
@@ -16,9 +17,17 @@ writeFile(true);
 setInterval(() => {
   const req = request(api, { page: 1, areaCode: "ALL" }, null);
   const dt = new Date();
-  const reqStart = dt.toLocaleString();
+  const reqStart = dt.toLocaleString("en-US", {
+    timeZone: "Asia/Jakarta",
+  });
   req
-    .then(() => console.log(`Success: ${new Date().toLocaleString()}`))
+    .then(() =>
+      console.log(
+        `Success: ${new Date().toLocaleString("en-US", {
+          timeZone: "Asia/Jakarta",
+        })}`
+      )
+    )
     .catch((e) => {
       writeFile(false, reqStart);
     });
@@ -35,9 +44,16 @@ function writeFile(begin = false, reqStart = null) {
     "./error.txt",
     begin
       ? `LOG every ${interval / 60000} Minutes -- start\n`
-      : `Error: start-> ${reqStart} end-> ${new Date().toLocaleString()}\n`,
+      : `Error: start-> ${reqStart} end-> ${new Date().toLocaleString("en-US", {
+          timeZone: "Asia/Jakarta",
+        })}\n`,
     "UTF-8",
-    () => console.log(`Error: ${new Date().toLocaleString()}`)
+    () =>
+      console.log(
+        `Error: ${new Date().toLocaleString("en-US", {
+          timeZone: "Asia/Jakarta",
+        })}`
+      )
   );
 }
 
