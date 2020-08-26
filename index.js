@@ -16,17 +16,9 @@ writeFile(true);
 setInterval(() => {
   const req = request(api, { page: 1, areaCode: "ALL" }, null);
   const dt = new Date();
-  const reqStart = dt.toLocaleString("en-US", {
-    timeZone: "Asia/Jakarta",
-  });
+  const reqStart = dt.toLocaleString();
   req
-    .then(() =>
-      console.log(
-        `Success: ${new Date().toLocaleString("en-US", {
-          timeZone: "Asia/Jakarta",
-        })}`
-      )
-    )
+    .then(() => console.log(`Success: ${new Date().toLocaleString()}`))
     .catch((e) => {
       writeFile(false, reqStart);
     });
@@ -43,16 +35,9 @@ function writeFile(begin = false, reqStart = null) {
     "./error.txt",
     begin
       ? `LOG every ${interval / 60000} Minutes -- start\n`
-      : `Error: start-> ${reqStart} end-> ${new Date().toLocaleString("en-US", {
-          timeZone: "Asia/Jakarta",
-        })}\n`,
+      : `Error: start-> ${reqStart} end-> ${new Date().toLocaleString()}\n`,
     "UTF-8",
-    () =>
-      console.log(
-        `Error: ${new Date().toLocaleString("en-US", {
-          timeZone: "Asia/Jakarta",
-        })}`
-      )
+    () => console.log(`Error: ${new Date().toLocaleString()}`)
   );
 }
 
