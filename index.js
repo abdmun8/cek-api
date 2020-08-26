@@ -8,7 +8,6 @@ const url = "https://tod-api.trakindo.co.id/api/service/quotation";
 const api = { endpoint: url, method: "GET", data: {} };
 const interval = 300000; //ms 5m
 const timeout = 30;
-s;
 const token = "";
 
 // init
