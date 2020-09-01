@@ -18,7 +18,7 @@ const token = "";
 
 setInterval(() => {
   urls.forEach((urlItem) => {
-    const api = { endpoint: urlItem, method: "GET", data: {} };
+    const api = { endpoint: host + urlItem, method: "GET", data: {} };
     const req = request(api, { page: 1, areaCode: "ALL" });
     const reqStart = new Date();
     req
