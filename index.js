@@ -20,19 +20,18 @@ setInterval(() => {
   urls.forEach((urlItem) => {
     const api = { endpoint: host + urlItem, method: "GET", data: {} };
     const req = request(api, { page: 1, areaCode: "ALL" });
-    const reqStart = new Date();
     req
-      .then(() => writeFile(urlItem, reqStart)) //console.log(`Success: ${new Date().toLocaleString()}`))
-      .catch((e) => writeFile(urlItem, reqStart, "Failed"));
-  }, interval);
-});
+      .then((reqStart) => writeFile(urlItem, reqStart))
+      .catch((reqStart) => writeFile(urlItem, reqStart, "Failed"));
+  });
+}, interval);
 
 /**
  * write log to file
- * @param {*} begin
+ * @param {*} url
  * @param {*} reqStart
+ * @param {*} status
  */
-// write file
 function writeFile(url, reqStart, status = "Success") {
   let file = "";
   switch (url) {
@@ -78,6 +77,10 @@ function writeFile(url, reqStart, status = "Success") {
   );
 }
 
+/**
+ *
+ * @param {*} time
+ */
 function convertDuration(time) {
   if (time < 1000) {
     return `${time} ms`;
