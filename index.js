@@ -1,5 +1,6 @@
 const axios = require("axios");
 const fs = require("fs");
+const moment = require("moment-timezone");
 
 // config
 const cookies =
@@ -15,6 +16,8 @@ const urls = [
 const interval = 300000; //ms 5m
 const timeout = 120;
 const token = "";
+const timeZone = "Asia/jakarta";
+const dateFormat = "YYYY-MM-DD HH:mm:ss";
 
 setInterval(() => {
   urls.forEach((urlItem) => {
@@ -37,43 +40,45 @@ function writeFile(url, reqStart, status = "Success") {
   switch (url) {
     case "quotation":
       file =
-        status == "Success" ? "quotation/success.log" : "quotation/error.log";
+        status == "Success"
+          ? "log/quotation/success.log"
+          : "log/quotation/error.log";
       break;
     case "readyToExecute":
       file =
         status == "Success"
-          ? "readyToExecute/success.log"
-          : "readyToExecute/error.log";
+          ? "log/readyToExecute/success.log"
+          : "log/readyToExecute/error.log";
       break;
     case "serviceRequestWip":
       file =
         status == "Success"
-          ? "serviceRequestWip/success.log"
-          : "serviceRequestWip/error.log";
+          ? "log/serviceRequestWip/success.log"
+          : "log/serviceRequestWip/error.log";
       break;
     case "jobComplete":
       file =
         status == "Success"
-          ? "jobComplete/success.log"
-          : "jobComplete/error.log";
+          ? "log/jobComplete/success.log"
+          : "log/jobComplete/error.log";
       break;
     default:
       file =
         status == "Success"
-          ? "serviceRequest/success.log"
-          : "serviceRequest/error.log";
+          ? "log/serviceRequest/success.log"
+          : "log/serviceRequest/error.log";
       break;
   }
 
-  const reqComplete = new Date();
-  const duration = parseInt(reqComplete.getTime() - reqStart.getTime());
+  const reqComplete = moment().tz(timeZone);
+  const duration = parseInt(reqComplete.diff(reqStart));
   fs.appendFile(
     file,
-    `${status} [start]: ${reqStart.toString()} [duration]: ${convertDuration(
-      duration
-    )}\n`,
+    `${status} [start]: ${moment()
+      .tz(timeZone)
+      .format(dateFormat)} [duration]: ${convertDuration(duration)}\n`,
     "UTF-8",
-    () => console.log(`writed: ${new Date().toString()}`)
+    () => console.log(`writed: ${moment().tz(timeZone).format(dateFormat)}`)
   );
 }
 
@@ -122,7 +127,7 @@ function request(api, param) {
     axiosConfig.data = params;
   }
 
-  let reqStart = new Date();
+  let reqStart = moment().tz(timeZone);
   return new Promise((resolve, reject) => {
     axios(axiosConfig)
       .then((response) => {
